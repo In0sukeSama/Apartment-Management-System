@@ -2,15 +2,15 @@ import tkinter as tk
 from tkinter import *
 from tkinter import messagebox,PhotoImage
 from PIL import ImageTk,Image
+from pathlib import Path
 import mysql.connector as ms
 
-con = ms.connect(host='localhost',user='root',password='123456')
+con = ms.connect(host='localhost',user='root',password='jagath54321')
 
 ### these are for the slider label
 y = "WELCOME TO APT MANAGMENT SYSTEM"
 count = 0
 text = ""
-
 
 x = "....."
 count2 = 0
@@ -351,12 +351,41 @@ if con.is_connected():
 
 
                       # Create an object of tk ImageTk
-      global img
-      img = PhotoImage(file='C:/Users/Rohit/Desktop/Dubai-PNG-Pic.png', master=window2)
 
-                      # Create a Label Widget to display the text or Image
-      label = tk.Label(frame, image=img)
-      label.place(x=-400,y=-300)
+      BASE_DIR = Path(__file__).resolve().parent
+      img_path = BASE_DIR / 'static' / 'images' / 'Dubai-PNG-Pic.png'
+      print("DEBUG: Looking for home image at:", img_path)
+      
+      if not img_path.exists():
+          print("DEBUG: Home image NOT FOUND at:", img_path)
+      else:
+          try:
+              pil = Image.open(img_path)
+      
+              # resize to frame size to avoid huge images
+              pil = pil.resize((900, 815), Image.LANCZOS)
+      
+              # IMPORTANT: specify master so the PhotoImage is bound to the same Tk instance
+              img_obj = ImageTk.PhotoImage(pil, master=window2)
+              print("DEBUG: Loaded resized image, size:", pil.size)
+      
+              # create label on the frame and attach image
+              bg_label = tk.Label(frame, image=img_obj)
+              bg_label.place(x=0, y=0, relwidth=1.0, relheight=1.0)
+      
+              # keep multiple strong references so it never disappears or becomes invalid
+              bg_label.image = img_obj     # reference on the label itself
+              frame._bg_img = img_obj      # reference on the frame
+              window2._bg_img = img_obj    # extra reference on the window
+      
+              # send background behind other widgets
+              bg_label.lower()
+      
+              print("DEBUG: Background successfully placed on FRAME with explicit master.")
+          except Exception as e:
+              print("DEBUG: Background exception:", e)
+      # --- end background image ---
+
 
       COMPLAINTS_button = tk.Button(window2,
           text="COMPLAINTS", bg="#FF3399", fg="#FFFFFF", font=("Arial", 16), command=Complaints)
@@ -1274,7 +1303,7 @@ if con.is_connected():
 
                   f = open("comment.txt",'w')
                   f.write(comment)
-                  f.close
+                  f.close()
 
                   query = "SELECT * FROM complaints"
                   cur.execute(query)
@@ -1545,13 +1574,40 @@ if con.is_connected():
 
 
                     # Create an object of tk ImageTk
-    global img
-    img = PhotoImage(file='C:/Users/Rohit/Desktop/Dubai-PNG-Pic.png', master=window2)
 
-                    # Create a Label Widget to display the text or Image
-    label = tk.Label(frame, image=img)
-    label.place(x=-400,y=-300)
+    BASE_DIR = Path(__file__).resolve().parent
+    img_path = BASE_DIR / 'static' / 'images' / 'Dubai-PNG-Pic.png'
+    print("DEBUG: Looking for home image at:", img_path)
 
+    if not img_path.exists():
+        print("DEBUG: Home image NOT FOUND at:", img_path)
+    else:
+        try:
+            pil = Image.open(img_path)
+
+            # resize to frame size to avoid huge images
+            pil = pil.resize((900, 815), Image.LANCZOS)
+
+            # IMPORTANT: specify master so the PhotoImage is bound to the same Tk instance
+            img_obj = ImageTk.PhotoImage(pil, master=window2)
+            print("DEBUG: Loaded resized image, size:", pil.size)
+
+            # create label on the frame and attach image
+            bg_label = tk.Label(frame, image=img_obj)
+            bg_label.place(x=0, y=0, relwidth=1.0, relheight=1.0)
+
+            # keep multiple strong references so it never disappears or becomes invalid
+            bg_label.image = img_obj     # reference on the label itself
+            frame._bg_img = img_obj      # reference on the frame
+            window2._bg_img = img_obj    # extra reference on the window
+
+            # send background behind other widgets
+            bg_label.lower()
+
+            print("DEBUG: Background successfully placed on FRAME with explicit master.")
+        except Exception as e:
+            print("DEBUG: Background exception:", e)
+    # --- end background image ---
 
     
                   # Labels for home page
@@ -1634,7 +1690,7 @@ if con.is_connected():
       frame.place(x=0, y=0)
 
       global img
-      img = PhotoImage(file='C:/Users/Rohit/Desktop/lovepik-apartment-building-png-image_401530275_wh1200.png', master=window1)
+      img = PhotoImage(file='static/images/lovepik-apartment-building-png-image_401530275_wh1200.png', master=window1)
 
                         # Create a Label Widget to display the text or Image
       label = tk.Label(frame, image=img)
@@ -1806,7 +1862,7 @@ if con.is_connected():
       frame.place(x=0, y=0)
 
       global img
-      img = PhotoImage(file='C:/Users/Rohit/Desktop/lovepik-apartment-building-png-image_401530275_wh1200.png', master=window)
+      img = PhotoImage(file='static/images/lovepik-apartment-building-png-image_401530275_wh1200.png', master=window)
 
                         # Create a Label Widget to display the text or Image
       label = tk.Label(frame, image=img)
@@ -1855,7 +1911,7 @@ if con.is_connected():
       frame.place(x=0, y=0)
 
       global img1
-      img1 = PhotoImage(file='C:/Users/Rohit/Desktop/Finance_a_home.png', master=window_start)
+      img1 = PhotoImage(file='static/images/Finance_a_home.png', master=window_start)
 
                         # Create a Label Widget to display the text or Image
       label = tk.Label(frame, image=img1)
